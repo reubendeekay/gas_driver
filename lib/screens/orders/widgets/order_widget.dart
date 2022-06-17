@@ -100,7 +100,7 @@ class OrderWidget extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 6),
-                      Text('-' + request.user!.fullName!,
+                      Text('By ${request.user!.fullName!}',
                           style: const TextStyle(
                               fontSize: 12, color: Colors.grey)),
                     ],

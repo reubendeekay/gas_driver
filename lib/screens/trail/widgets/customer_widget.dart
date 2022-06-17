@@ -2,8 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_driver/constants.dart';
 import 'package:gas_driver/models/request_model.dart';
+import 'package:gas_driver/providers/request_provider.dart';
+import 'package:gas_driver/screens/trail/widgets/trail_actions_sheet.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CustomerWidget extends StatelessWidget {
   const CustomerWidget({Key? key, required this.request}) : super(key: key);
@@ -90,37 +93,60 @@ class CustomerWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(3),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey[300]!, width: 1),
-                    borderRadius: BorderRadius.circular(2)),
-                child: const Icon(
-                  Icons.keyboard_arrow_down_sharp,
-                  size: 14,
+              GestureDetector(
+                onTap: () {
+                  actionSheet(context, request);
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Colors.grey[300]!, width: 1),
+                          borderRadius: BorderRadius.circular(2)),
+                      child: const Icon(
+                        Icons.keyboard_arrow_down_sharp,
+                        size: 14,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    const Text(
+                      'More',
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              const Text(
-                'Details',
-                style: TextStyle(color: Colors.grey, fontSize: 12),
               ),
               const SizedBox(
                 width: 15,
               ),
               Expanded(
                 child: RaisedButton.icon(
-                  onPressed: () {},
+                  onPressed: () async {
+                    request.status.toLowerCase() == 'arrived'
+                        ? await Provider.of<RequestProvider>(context,
+                                listen: false)
+                            .completeRequest(request, context)
+                        : await Provider.of<RequestProvider>(context,
+                                listen: false)
+                            .arrivedAtDestination(
+                            request,
+                          );
+                    Navigator.of(context).pop();
+                  },
                   icon: const Icon(
-                    Iconsax.call_calling,
+                    Iconsax.activity,
                     size: 20,
                     color: Colors.white,
                   ),
                   textColor: Colors.white,
                   color: kIconColor,
-                  label: const Text('Connect'),
+                  label: Text(request.status.toLowerCase() == 'arrived'
+                      ? 'Complete'
+                      : 'Arrived'),
                 ),
               )
             ],

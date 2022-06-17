@@ -64,6 +64,79 @@ class RequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> completeRequest(
+      RequestModel request, BuildContext context) async {
+    await FirebaseFirestore.instance
+        .collection('requests')
+        .doc('users')
+        .collection(request.user!.userId!)
+        .doc(request.id!)
+        .update({
+      'status': 'completed',
+    });
+    await FirebaseFirestore.instance
+        .collection('requests')
+        .doc('providers')
+        .collection(request.products!.first.ownerId!)
+        .doc(request.id!)
+        .update({
+      'status': 'completed',
+    });
+    await FirebaseFirestore.instance
+        .collection('requests')
+        .doc('common')
+        .collection('drivers')
+        .doc(request.id!)
+        .update({
+      'status': 'completed',
+    });
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(request.user!.userId!)
+        .update({
+      'transitId': null,
+    });
+    Provider.of<AuthProvider>(context, listen: false).setTransitId(null);
+    notifyListeners();
+  }
+
+  Future<void> arrivedAtDestination(
+    RequestModel request,
+  ) async {
+    await FirebaseFirestore.instance
+        .collection('requests')
+        .doc('users')
+        .collection(request.user!.userId!)
+        .doc(request.id!)
+        .update({
+      'status': 'arrived',
+    });
+    await FirebaseFirestore.instance
+        .collection('requests')
+        .doc('providers')
+        .collection(request.products!.first.ownerId!)
+        .doc(request.id!)
+        .update({
+      'status': 'arrived',
+    });
+    await FirebaseFirestore.instance
+        .collection('requests')
+        .doc('common')
+        .collection('drivers')
+        .doc(request.id!)
+        .update({
+      'status': 'arrived',
+    });
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(request.user!.userId!)
+        .update({
+      'transitId': null,
+    });
+
+    notifyListeners();
+  }
+
   Future<RequestModel> getRequestDetails(String requestId) async {
     final results = await FirebaseFirestore.instance
         .collection('requests')
