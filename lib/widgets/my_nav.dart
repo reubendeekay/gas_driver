@@ -5,6 +5,7 @@ import 'package:gas_driver/models/request_model.dart';
 import 'package:gas_driver/providers/location_provider.dart';
 import 'package:gas_driver/screens/home/homepage.dart';
 import 'package:gas_driver/screens/orders/orders_screen.dart';
+import 'package:gas_driver/screens/profile/user_profile_screen.dart';
 import 'package:gas_driver/screens/trail/customer_request_dialog.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,7 @@ class _BottomNavBar extends State<MyBottomNav> {
   late final List<Widget> _screens = const [
     Homepage(),
     OrdersScreen(),
-    Homepage(),
+    UserProfileScreen(),
   ];
 
   _selectScreen(int index) {

@@ -21,20 +21,21 @@ class OnDeliveryTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(color: kIconColor.withOpacity(0.4)),
-        child: Row(children: const [
-          Icon(
-            Icons.motorcycle_outlined,
-          ),
-          SizedBox(
+        child: Row(children: [
+          Icon(Icons.motorcycle_outlined, color: Colors.green[900]),
+          const SizedBox(
             width: 20,
           ),
           Text(
             'You are on delivery',
-            style: TextStyle(fontSize: 13),
+            style: TextStyle(fontSize: 13, color: Colors.green[900]),
           ),
-          Spacer(),
+          const Spacer(),
           Text('GO TO ORDER',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12)),
+              style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                  color: Colors.green[900])),
         ]),
       ),
     );

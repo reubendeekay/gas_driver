@@ -32,9 +32,19 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SizedBox(height: 200, child: Lottie.asset('assets/rider.json')),
-      ),
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+                height: 200,
+                width: double.infinity,
+                child: Lottie.asset('assets/rider.json')),
+            const Text(
+              'Loading...',
+              style: TextStyle(fontSize: 16),
+            ),
+          ]),
     );
   }
 }

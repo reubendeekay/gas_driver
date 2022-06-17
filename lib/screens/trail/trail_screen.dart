@@ -97,12 +97,12 @@ class _TrailScreenState extends State<TrailScreen> {
             request.userLocation!.latitude, request.userLocation!.longitude),
       ),
     ]);
-    var _coordinates = await googleMapPolyline.getCoordinatesWithLocation(
+    var coordinates = await googleMapPolyline.getCoordinatesWithLocation(
         origin: LatLng(loc.latitude!, loc.longitude!),
         destination: LatLng(
             request.userLocation!.latitude, request.userLocation!.longitude),
         mode: RouteMode.driving);
-    _addPolyline(_coordinates!);
+    _addPolyline(coordinates!);
 
     setState(() {});
   }
