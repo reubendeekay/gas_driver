@@ -126,16 +126,16 @@ class CustomerWidget extends StatelessWidget {
               Expanded(
                 child: RaisedButton.icon(
                   onPressed: () async {
-                    request.status.toLowerCase() == 'arrived'
-                        ? await Provider.of<RequestProvider>(context,
-                                listen: false)
-                            .completeRequest(request, context)
-                        : await Provider.of<RequestProvider>(context,
-                                listen: false)
-                            .arrivedAtDestination(
-                            request,
-                          );
-                    Navigator.of(context).pop();
+                    if (request.status.toLowerCase() == 'arrived') {
+                      await Provider.of<RequestProvider>(context, listen: false)
+                          .completeRequest(request, context);
+                    } else {
+                      await Provider.of<RequestProvider>(context, listen: false)
+                          .arrivedAtDestination(
+                        request,
+                      );
+                      Navigator.of(context).pop();
+                    }
                   },
                   icon: const Icon(
                     Iconsax.activity,
