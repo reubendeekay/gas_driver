@@ -1,7 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_driver/constants.dart';
+import 'package:gas_driver/models/request_model.dart';
+import 'package:gas_driver/providers/location_provider.dart';
 import 'package:gas_driver/screens/home/homepage.dart';
 import 'package:gas_driver/screens/orders/orders_screen.dart';
+import 'package:gas_driver/screens/trail/customer_request_dialog.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
 class MyBottomNav extends StatefulWidget {
   const MyBottomNav({Key? key}) : super(key: key);
@@ -28,8 +34,27 @@ class _BottomNavBar extends State<MyBottomNav> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<LocationProvider>(context, listen: false).getCurrentLocation();
     return Scaffold(
-      body: _screens[_selectedScreenIndex],
+      body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('requests/common/drivers')
+              .where('status', isEqualTo: 'pending')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.docs.isNotEmpty) {
+                return Stack(
+                  children: [
+                    _screens[_selectedScreenIndex],
+                    CustomerRequestDialog(
+                        request: RequestModel.fromJson(snapshot.data!.docs[0])),
+                  ],
+                );
+              }
+            }
+            return _screens[_selectedScreenIndex];
+          }),
       bottomNavigationBar: Container(
         height: 55,
         width: double.infinity,
@@ -114,17 +139,15 @@ class NavBarIcon extends StatelessWidget {
         children: [
           Container(
             height: 32,
-            width: 64,
+            width: 80,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(16)),
+              color: active ? kIconColor.withOpacity(0.3) : Colors.transparent,
+            ),
             child: Icon(
               active ? icon : inactiveIcon,
               size: 24,
               color: _activeOpacity(),
-            ),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(16)),
-              color: active
-                  ? Theme.of(context).colorScheme.primary.withOpacity(0.2)
-                  : Colors.transparent,
             ),
           ),
           const SizedBox(

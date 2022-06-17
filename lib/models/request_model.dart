@@ -54,9 +54,10 @@ class RequestModel {
       driverLocation: json['driverLocation'] as GeoPoint,
       userLocation: json['userLocation'] as GeoPoint,
       paymentMethod: json['paymentMethod'] as String,
-      id: json['id'] as String,
+      id: json.id as String,
       total: json['total'] as double,
       status: json['status'] as String,
+      createdAt: json['createdAt'] as Timestamp,
     );
   }
 }

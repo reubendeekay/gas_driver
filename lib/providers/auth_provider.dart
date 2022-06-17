@@ -98,4 +98,13 @@ class AuthProvider with ChangeNotifier {
       location: LatLng(loc.latitude, loc.longitude),
     );
   }
+
+  void setTransitId(String? id) {
+    if (id == null) {
+      _user!.transitId = null;
+    } else {
+      _user!.transitId = id;
+    }
+    notifyListeners();
+  }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gas_driver/constants.dart';
 import 'package:gas_driver/providers/auth_provider.dart';
 import 'package:gas_driver/screens/home/homepage.dart';
+import 'package:gas_driver/widgets/loading_screen.dart';
+import 'package:gas_driver/widgets/my_nav.dart';
 import 'package:gas_driver/widgets/my_text_field.dart';
 import 'package:get/route_manager.dart';
 import 'package:lottie/lottie.dart';
@@ -75,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   try {
                     await Provider.of<AuthProvider>(context, listen: false)
                         .login(email!, password!);
-                    Get.offAll(() => const Homepage());
+                    Get.offAll(() => const InitialLoadingScreen());
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

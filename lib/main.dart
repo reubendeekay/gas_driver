@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:gas_driver/constants.dart';
 import 'package:gas_driver/firebase_options.dart';
 import 'package:gas_driver/providers/auth_provider.dart';
+import 'package:gas_driver/providers/location_provider.dart';
+import 'package:gas_driver/providers/request_provider.dart';
 import 'package:gas_driver/screens/auth/login.dart';
 import 'package:gas_driver/screens/home/homepage.dart';
+import 'package:gas_driver/widgets/loading_screen.dart';
 import 'package:gas_driver/widgets/my_nav.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,6 +31,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => LocationProvider()),
+        ChangeNotifierProvider(create: (_) => RequestProvider()),
       ],
       child: GetMaterialApp(
         title: 'Driver App',
@@ -58,7 +63,7 @@ class MyApp extends StatelessWidget {
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return const MyBottomNav();
+                return const InitialLoadingScreen();
               }
               return const LoginScreen();
             }),

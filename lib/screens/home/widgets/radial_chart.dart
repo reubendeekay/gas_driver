@@ -63,6 +63,7 @@ class RadialChart extends StatelessWidget {
                     labelPadding: 0,
                     animate: true,
                     donutWidth: 8,
+                    animationDuration: const Duration(seconds: 1),
                     strokeWidth: 0,
                     labelLineColor: Colors.transparent,
                     labelColor: Colors.transparent,

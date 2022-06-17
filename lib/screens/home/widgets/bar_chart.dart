@@ -44,6 +44,7 @@ class BarChart extends StatelessWidget {
               axisLinePointWidth: 10,
               axisLineColor: Colors.grey[300],
               measureLabelPaddingToAxisLine: 16,
+              animationDuration: const Duration(seconds: 1),
               barColor: (barData, index, id) => kIconColor,
               showBarValue: true,
             ),

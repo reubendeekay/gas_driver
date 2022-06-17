@@ -8,7 +8,7 @@ class UserModel {
   final String? phone;
   final bool? isProvider;
   final String? profilePic;
-  final String? transitId;
+  String? transitId;
   final String? plateNumber;
   List<UserLocation>? locations;
 
