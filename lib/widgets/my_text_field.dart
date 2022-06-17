@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gas_driver/constants.dart';
 
 class MyTextField extends StatelessWidget {
   const MyTextField(
@@ -30,6 +31,7 @@ class MyTextField extends StatelessWidget {
         hintText: hintText,
         hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
         border: InputBorder.none,
+        floatingLabelStyle: const TextStyle(color: kIconColor, fontSize: 14),
         prefixIcon: prefixIcon != null
             ? Icon(
                 prefixIcon,
