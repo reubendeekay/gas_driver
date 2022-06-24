@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gas_driver/constants.dart';
 import 'package:gas_driver/firebase_options.dart';
 import 'package:gas_driver/providers/auth_provider.dart';
+import 'package:gas_driver/providers/driver_provider.dart';
 import 'package:gas_driver/providers/location_provider.dart';
 import 'package:gas_driver/providers/request_provider.dart';
 import 'package:gas_driver/screens/auth/login.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => LocationProvider()),
         ChangeNotifierProvider(create: (_) => RequestProvider()),
+        ChangeNotifierProvider(create: (_) => DriverProvider()),
       ],
       child: GetMaterialApp(
         title: 'Driver App',

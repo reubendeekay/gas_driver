@@ -2,11 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_driver/constants.dart';
 import 'package:gas_driver/helpers/lists.dart';
+import 'package:gas_driver/providers/auth_provider.dart';
+import 'package:gas_driver/providers/driver_provider.dart';
 import 'package:gas_driver/screens/auth/login.dart';
 import 'package:gas_driver/screens/profile/widgets/delivery_status_tile.dart';
 import 'package:gas_driver/screens/profile/widgets/profile_stat_card.dart';
 import 'package:gas_driver/screens/profile/widgets/settings_widget.dart';
 import 'package:get/route_manager.dart';
+import 'package:provider/provider.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -17,9 +20,24 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   int selectedDeliveryStatus = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed((Duration.zero), () {
+      final driver = Provider.of<AuthProvider>(context, listen: false).driver!;
+      setState(() {
+        if (driver.isAvailable!) {
+          selectedDeliveryStatus = 1;
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final driver = Provider.of<AuthProvider>(context, listen: false).driver!;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Driver Profile'),
@@ -35,6 +53,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     child: ProfileStatCard(
                   color: Colors.green[900]!,
                   secondaryColor: Colors.green[200],
+                  value: driver.revenue!.toStringAsFixed(2),
                 )),
                 const SizedBox(
                   width: 15,
@@ -42,7 +61,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 Expanded(
                     child: ProfileStatCard(
                   label: 'Orders',
-                  value: '29',
+                  value: driver.numOfOrders!.toString(),
                   color: Colors.blue[900]!,
                   secondaryColor: Colors.blue[200],
                   icon: Icons.shopping_bag_outlined,
@@ -59,7 +78,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   color: Colors.purple[900]!,
                   secondaryColor: Colors.purple[200],
                   label: 'Tips',
-                  value: '15',
+                  value: '0',
                   icon: Icons.credit_score_sharp,
                 )),
                 const SizedBox(
@@ -70,7 +89,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   color: Colors.pink[900]!,
                   secondaryColor: Colors.pink[200],
                   label: 'Rating',
-                  value: '4.5',
+                  value: driver.rating!.toStringAsFixed(1),
                   icon: Icons.star_half,
                 )),
               ],
@@ -80,7 +99,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
             const Text(
               'Delivery',
-              style: const TextStyle(fontSize: 12),
+              style: TextStyle(fontSize: 12),
             ),
             const SizedBox(
               height: 15,
@@ -89,10 +108,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               children: List.generate(
                   deliveryStatus.length,
                   (index) => GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           setState(() {
                             selectedDeliveryStatus = index;
                           });
+                          await Provider.of<DriverProvider>(context,
+                                  listen: false)
+                              .setDriverAvailability(index == 1, context);
                         },
                         child: DeliveryStatusCard(
                             isSelected: selectedDeliveryStatus == index,

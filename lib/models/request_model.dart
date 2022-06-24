@@ -9,7 +9,7 @@ class RequestModel {
   GeoPoint? userLocation;
   final UserModel? user;
   String? paymentMethod;
-  final String status;
+  String status;
   final Timestamp? createdAt;
 
   final List<ProductModel>? products;

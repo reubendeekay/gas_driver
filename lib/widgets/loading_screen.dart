@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_driver/providers/auth_provider.dart';
 import 'package:gas_driver/providers/location_provider.dart';
 import 'package:gas_driver/widgets/my_nav.dart';
+import 'package:gas_driver/widgets/unauthorised_user.dart';
 import 'package:get/route_manager.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -16,16 +18,21 @@ class InitialLoadingScreen extends StatefulWidget {
 class _InitialLoadingScreenState extends State<InitialLoadingScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     Future.delayed(Duration.zero, () async {
       await Provider.of<AuthProvider>(context, listen: false).getCurrentUser();
 
-      await Provider.of<LocationProvider>(context, listen: false)
-          .getCurrentLocation();
+      final user = Provider.of<AuthProvider>(context, listen: false).user!;
 
-      Get.offAll(() => const MyBottomNav());
+      if (!user.isDriver!) {
+        Get.to(() => const UnauthorisedUserDialog());
+      } else {
+        await Provider.of<LocationProvider>(context, listen: false)
+            .getCurrentLocation();
+
+        Get.offAll(() => const MyBottomNav());
+      }
     });
   }
 

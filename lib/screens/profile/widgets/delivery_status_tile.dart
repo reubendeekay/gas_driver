@@ -7,6 +7,7 @@ class DeliveryStatusCard extends StatelessWidget {
       : super(key: key);
 
   final bool isSelected;
+
   final Map<String, dynamic> status;
 
   @override

@@ -12,8 +12,8 @@ import 'package:provider/provider.dart';
 class RequestProvider with ChangeNotifier {
   Future<void> sendDriverAcceptance(RequestModel request, UserModel driver,
       LatLng driverInitialLocation, BuildContext context) async {
-    print(request.user!.userId!);
-    print(request.toJson());
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
 //TO USER REQUEST POOL
     await FirebaseFirestore.instance
         .collection('requests')
@@ -58,6 +58,9 @@ class RequestProvider with ChangeNotifier {
         .update({
       'transitId': request.id!,
     });
+    await FirebaseFirestore.instance.collection('drivers').doc(uid).update({
+      'isAvailable': false,
+    });
 
     Provider.of<AuthProvider>(context, listen: false).setTransitId(request.id!);
 
@@ -66,6 +69,8 @@ class RequestProvider with ChangeNotifier {
 
   Future<void> completeRequest(
       RequestModel request, BuildContext context) async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
     await FirebaseFirestore.instance
         .collection('requests')
         .doc('users')
@@ -96,6 +101,21 @@ class RequestProvider with ChangeNotifier {
         .update({
       'transitId': null,
     });
+
+    request.status = 'completed';
+    await FirebaseFirestore.instance
+        .collection('requests')
+        .doc('completed')
+        .collection(uid)
+        .doc(request.id!)
+        .set(request.toJson());
+
+    await FirebaseFirestore.instance.collection('drivers').doc(uid).update({
+      'revenue': FieldValue.increment(request.total!),
+      'isAvailable': true,
+      'numOfOrders': FieldValue.increment(1),
+    });
+
     Provider.of<AuthProvider>(context, listen: false).setTransitId(null);
     notifyListeners();
   }

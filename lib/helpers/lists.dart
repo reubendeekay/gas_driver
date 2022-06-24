@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gas_driver/screens/notifications/notifications_screen.dart';
+import 'package:gas_driver/screens/profile/widgets/edit_profile_screen.dart';
+import 'package:get/route_manager.dart';
 import 'package:iconsax/iconsax.dart';
 
 List<Map<String, dynamic>> deliveryStatus = [
@@ -20,14 +23,18 @@ List<Map<String, dynamic>> settingOptions = [
     'icon': Iconsax.profile_add,
     'color': Colors.blue[900],
     'secondaryColor': Colors.blue[200],
-    'onTap': () {}
+    'onTap': () {
+      Get.to(() => const EditProfileScreen());
+    }
   },
   {
     'title': 'Notifications',
     'icon': Iconsax.notification,
     'color': Colors.green[900],
     'secondaryColor': Colors.green[200],
-    'onTap': () {}
+    'onTap': () {
+      Get.to(() => NotificationsScreen());
+    }
   },
   {
     'title': 'Privacy',

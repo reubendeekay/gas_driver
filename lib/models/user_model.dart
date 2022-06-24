@@ -7,7 +7,8 @@ class UserModel {
   final String? password;
   final String? phone;
   final bool? isProvider;
-  final String? profilePic;
+  final bool? isDriver;
+  String? profilePic;
   String? transitId;
   final String? plateNumber;
   List<UserLocation>? locations;
@@ -19,6 +20,7 @@ class UserModel {
       this.phone,
       this.isProvider,
       this.transitId,
+      this.isDriver,
       this.plateNumber = 'KMFF 730P ',
       this.userId,
       this.locations,
@@ -32,8 +34,8 @@ class UserModel {
       'phone': phone,
       'isProvider': false,
       'userId': userId,
-      'profilePic':
-          'https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png',
+      'isDriver': isDriver,
+      'profilePic': profilePic,
       'transitId': transitId,
       'plateNumber': plateNumber,
     };
@@ -50,6 +52,7 @@ class UserModel {
       profilePic: json['profilePic'],
       transitId: json['transitId'],
       plateNumber: json['plateNumber'],
+      isDriver: json['isDriver'],
     );
   }
 }

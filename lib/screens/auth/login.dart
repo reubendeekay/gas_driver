@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gas_driver/constants.dart';
 import 'package:gas_driver/providers/auth_provider.dart';
+import 'package:gas_driver/screens/auth/sign_up.dart';
 import 'package:gas_driver/screens/home/homepage.dart';
 import 'package:gas_driver/widgets/loading_screen.dart';
 import 'package:gas_driver/widgets/my_nav.dart';
@@ -104,18 +105,23 @@ class _LoginScreenState extends State<LoginScreen> {
               height: size.height * .1,
             ),
             Center(
-              child: RichText(
-                  text: const TextSpan(
-                      text: 'Not a member? ',
-                      style: TextStyle(color: Colors.black),
-                      children: [
-                    TextSpan(
-                      text: 'Sign Up',
-                      style: TextStyle(
-                          color: kIconColor,
-                          decoration: TextDecoration.underline),
-                    )
-                  ])),
+              child: GestureDetector(
+                onTap: () {
+                  Get.to(() => const SignUpScreen());
+                },
+                child: RichText(
+                    text: const TextSpan(
+                        text: 'Not a registered driver? ',
+                        style: TextStyle(color: Colors.black),
+                        children: [
+                      TextSpan(
+                        text: 'Sign Up',
+                        style: TextStyle(
+                            color: kIconColor,
+                            decoration: TextDecoration.underline),
+                      )
+                    ])),
+              ),
             )
           ]),
     );
