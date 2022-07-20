@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gas_driver/models/driver_model.dart';
@@ -10,6 +9,7 @@ import 'package:gas_driver/models/user_model.dart';
 import 'package:gas_driver/providers/location_provider.dart';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class AuthProvider with ChangeNotifier {
   UserModel? _user;
@@ -19,16 +19,15 @@ class AuthProvider with ChangeNotifier {
   DriverModel? get driver => _driver;
 
   Future<void> login(String email, String password) async {
-    final userCredential = await FirebaseAuth.instance
+    await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);
+    await FirebaseMessaging.instance.getToken().then((token) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({'pushToken': token});
+    }).catchError((err) {});
 
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userCredential.user!.uid)
-        .get()
-        .then((value) {
-      _user = UserModel.fromJson(value);
-    });
     await getCurrentUser();
 
     notifyListeners();
@@ -54,6 +53,12 @@ class AuthProvider with ChangeNotifier {
         .collection('users')
         .doc(userCredential.user!.uid)
         .set(userModel.toJson());
+    await FirebaseMessaging.instance.getToken().then((token) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({'pushToken': token});
+    }).catchError((err) {});
 
     //TODO: ADD USER TO NEARBY DRIVERS COLLECTION
 
@@ -61,7 +66,7 @@ class AuthProvider with ChangeNotifier {
         .collection('drivers')
         .doc(userCredential.user!.uid)
         .set({
-      'user': userModel.toJson(),
+      'userId': userModel.userId,
       'isAvailable': true,
       'plateNumber': plateNumber.toUpperCase(),
       'revenue': 0,
@@ -83,21 +88,6 @@ class AuthProvider with ChangeNotifier {
         .then((value) {
       return UserModel.fromJson(value);
     });
-    await FirebaseFirestore.instance
-        .collection('drivers')
-        .doc(userData.userId!)
-        .set({
-      'userId': userData.userId,
-      'isAvailable': true,
-      'plateNumber': 'KMCT 2001'.toUpperCase(),
-      'revenue': 0,
-      'rating': 0,
-      'numOfOrders': 0,
-    });
-
-    final locs = await getUserLocations();
-
-    userData.locations = locs;
 
     if (userData.isDriver!) {
       final driverData = await FirebaseFirestore.instance

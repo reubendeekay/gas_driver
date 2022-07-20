@@ -53,7 +53,7 @@ class _TrailScreenState extends State<TrailScreen> {
 
 //google cloud api key
   GoogleMapPolyline googleMapPolyline =
-      GoogleMapPolyline(apiKey: "AIzaSyDxbfpRGmq3Wjex1SfTXwySuxQaCiQZxUM");
+      GoogleMapPolyline(apiKey: "AIzaSyDIL1xyrMndlk2dSSSSikdobR8qDjz0jjQ");
 
   void _onMapCreated(GoogleMapController controller) async {
     _controller = controller;
@@ -131,7 +131,7 @@ class _TrailScreenState extends State<TrailScreen> {
                   polylines: _polylines.values.toSet(),
                   myLocationButtonEnabled: true,
                   initialCameraPosition: CameraPosition(
-                      target: LatLng(loc.latitude!, loc.longitude!), zoom: 15),
+                      target: LatLng(loc.latitude!, loc.longitude!), zoom: 18),
                 ),
                 if (snapshot.hasData)
                   Positioned(

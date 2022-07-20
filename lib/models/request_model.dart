@@ -10,6 +10,7 @@ class RequestModel {
   final UserModel? user;
   String? paymentMethod;
   String status;
+  final double deliveryFee;
   final Timestamp? createdAt;
 
   final List<ProductModel>? products;
@@ -21,6 +22,7 @@ class RequestModel {
       this.products,
       this.driverLocation,
       this.userLocation,
+      this.deliveryFee = 0,
       this.paymentMethod,
       this.id,
       this.total,
@@ -38,6 +40,7 @@ class RequestModel {
       'id': id,
       'total': total,
       'status': status,
+      'deliverFee': deliveryFee,
     };
   }
 
@@ -58,6 +61,7 @@ class RequestModel {
       total: json['total'] as double,
       status: json['status'] as String,
       createdAt: json['createdAt'] as Timestamp,
+      deliveryFee: double.parse(json['deliveryFee'].toString()),
     );
   }
 }

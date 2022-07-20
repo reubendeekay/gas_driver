@@ -8,6 +8,8 @@ class UserModel {
   final String? phone;
   final bool? isProvider;
   final bool? isDriver;
+  final bool isAdmin;
+
   String? profilePic;
   String? transitId;
   final String? plateNumber;
@@ -21,6 +23,7 @@ class UserModel {
       this.isProvider,
       this.transitId,
       this.isDriver,
+      this.isAdmin = false,
       this.plateNumber = 'KMFF 730P ',
       this.userId,
       this.locations,
@@ -38,6 +41,7 @@ class UserModel {
       'profilePic': profilePic,
       'transitId': transitId,
       'plateNumber': plateNumber,
+      'isAdmin': isAdmin,
     };
   }
 
@@ -53,6 +57,7 @@ class UserModel {
       transitId: json['transitId'],
       plateNumber: json['plateNumber'],
       isDriver: json['isDriver'],
+      isAdmin: json['isAdmin'],
     );
   }
 }

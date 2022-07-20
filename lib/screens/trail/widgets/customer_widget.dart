@@ -129,12 +129,12 @@ class CustomerWidget extends StatelessWidget {
                     if (request.status.toLowerCase() == 'arrived') {
                       await Provider.of<RequestProvider>(context, listen: false)
                           .completeRequest(request, context);
+                      Navigator.of(context).pop();
                     } else {
                       await Provider.of<RequestProvider>(context, listen: false)
                           .arrivedAtDestination(
                         request,
                       );
-                      Navigator.of(context).pop();
                     }
                   },
                   icon: const Icon(

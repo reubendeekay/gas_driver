@@ -102,26 +102,28 @@ class _CustomerRequestWidgetState extends State<CustomerRequestWidget> {
                 activeColor: kPrimaryColor,
                 isFinished: isFinished,
                 onWaitingProcess: () {
-                  Future.delayed(const Duration(milliseconds: 500), () {
+                  Future.delayed(const Duration(milliseconds: 10), () async {
+                    final request = RequestModel(
+                      driverLocation: GeoPoint(loc!.latitude!, loc.longitude!),
+                      products: widget.request.products,
+                      id: widget.request.id,
+                      user: widget.request.user,
+                      driver: user,
+                      userLocation: widget.request.userLocation,
+                      paymentMethod: widget.request.paymentMethod,
+                      total: widget.request.total,
+                    );
+
+                    
+                    await Provider.of<RequestProvider>(context, listen: false)
+                        .sendDriverAcceptance(request, user,
+                            LatLng(loc.latitude!, loc.longitude!), context);
                     setState(() {
                       isFinished = true;
                     });
                   });
                 },
                 onFinish: () async {
-                  final request = RequestModel(
-                    driverLocation: GeoPoint(loc!.latitude!, loc.longitude!),
-                    products: widget.request.products,
-                    id: widget.request.id,
-                    user: widget.request.user,
-                    driver: user,
-                    userLocation: widget.request.userLocation,
-                    paymentMethod: widget.request.paymentMethod,
-                    total: widget.request.total,
-                  );
-                  await Provider.of<RequestProvider>(context, listen: false)
-                      .sendDriverAcceptance(request, user,
-                          LatLng(loc.latitude!, loc.longitude!), context);
                   // ignore: use_build_context_synchronously
                   Navigator.of(context).pop();
                   Navigator.push(

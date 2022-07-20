@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_driver/constants.dart';
 import 'package:gas_driver/models/request_model.dart';
+import 'package:gas_driver/providers/auth_provider.dart';
 import 'package:gas_driver/providers/location_provider.dart';
 import 'package:gas_driver/screens/home/homepage.dart';
 import 'package:gas_driver/screens/orders/orders_screen.dart';
@@ -36,15 +37,16 @@ class _BottomNavBar extends State<MyBottomNav> {
   @override
   Widget build(BuildContext context) {
     Provider.of<LocationProvider>(context, listen: false).getCurrentLocation();
+    final driver = Provider.of<AuthProvider>(context, listen: false).driver!;
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('requests/common/drivers')
-              .where('status', isEqualTo: 'pending')
+              .where('status', isEqualTo: 'accepted')
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              if (snapshot.data!.docs.isNotEmpty) {
+              if (snapshot.data!.docs.isNotEmpty && driver.isAvailable!) {
                 return Stack(
                   children: [
                     _screens[_selectedScreenIndex],

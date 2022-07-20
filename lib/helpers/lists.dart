@@ -37,8 +37,8 @@ List<Map<String, dynamic>> settingOptions = [
     }
   },
   {
-    'title': 'Privacy',
-    'icon': Iconsax.logout,
+    'title': 'About',
+    'icon': Iconsax.info_circle,
     'color': Colors.red[900],
     'secondaryColor': Colors.red[200],
     'onTap': () {}

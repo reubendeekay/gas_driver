@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_driver/screens/auth/sign_up.dart';
 import 'package:get/route_manager.dart';
@@ -15,7 +16,8 @@ class _UnauthorisedUserDialogState extends State<UnauthorisedUserDialog> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(seconds: 8), () {
+    Future.delayed(const Duration(seconds: 3), () async {
+      await FirebaseAuth.instance.signOut();
       Get.offAll(() => const SignUpScreen());
     });
   }

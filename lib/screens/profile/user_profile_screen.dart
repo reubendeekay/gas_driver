@@ -24,13 +24,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed((Duration.zero), () {
+    Future.delayed((Duration.zero), () async {
       final driver = Provider.of<AuthProvider>(context, listen: false).driver!;
+
       setState(() {
         if (driver.isAvailable!) {
           selectedDeliveryStatus = 1;
         }
       });
+
+      await Provider.of<AuthProvider>(context, listen: false).getCurrentUser();
     });
   }
 

@@ -44,8 +44,11 @@ class RadialChart extends StatelessWidget {
                   height: 130,
                   child: DChartGauge(
                     data: [
-                      {'domain': 'Completed', 'measure': completed},
-                      {'domain': 'Remaining', 'measure': total - completed},
+                      {
+                        'domain': 'Completed',
+                        'measure': completed == 0 ? 1 : completed
+                      },
+                      {'domain': 'Total', 'measure': total == 0 ? 1 : total},
                     ],
                     fillColor: (pieData, index) {
                       switch (pieData['domain']) {

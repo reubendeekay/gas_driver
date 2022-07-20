@@ -19,7 +19,7 @@ class OrdersScreen extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('requests/common/drivers')
-              .where('driver', isNotEqualTo: null)
+              .where('driver', isNull: false)
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {

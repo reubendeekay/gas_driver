@@ -11,7 +11,7 @@ class DriverProvider with ChangeNotifier {
     final ordersRef =
         FirebaseFirestore.instance.collection('requests/common/drivers');
 
-    final allOrders = await ordersRef.get();
+    final allOrders = await ordersRef.where('driver', isNull: false).get();
     final commpleted = allOrders.docs
         .where((element) => element['driver']['userId'] == uid)
         .length;
@@ -44,14 +44,16 @@ class DriverProvider with ChangeNotifier {
     List dayOfWeekLIst = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     //Get daily orders for the last week
-    final allOrders = await ordersRef.get();
+    final allOrders = await ordersRef.where('driver', isNull: false).get();
     final List<Map<String, dynamic>> daysOrder = [];
 
     for (int day = 0; day < 7; day++) {
       final dayData = allOrders.docs
-          .where((element) => element['createdAt']
-              .toDate()
-              .isAfter(DateTime.now().subtract(Duration(days: day))))
+          .where((element) =>
+              element['driver']['userId'] == uid &&
+              element['createdAt']
+                  .toDate()
+                  .isAfter(DateTime.now().subtract(Duration(days: day))))
           .length;
       daysOrder.add(
         {'domain': dayOfWeekLIst[day], 'measure': dayData},

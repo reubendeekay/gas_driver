@@ -8,9 +8,7 @@ import 'package:gas_driver/providers/driver_provider.dart';
 import 'package:gas_driver/providers/location_provider.dart';
 import 'package:gas_driver/providers/request_provider.dart';
 import 'package:gas_driver/screens/auth/login.dart';
-import 'package:gas_driver/screens/home/homepage.dart';
 import 'package:gas_driver/widgets/loading_screen.dart';
-import 'package:gas_driver/widgets/my_nav.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +16,6 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    name: "gas-app-26a73", 
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());

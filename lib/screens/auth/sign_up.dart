@@ -3,17 +3,14 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_driver/constants.dart';
-import 'package:gas_driver/models/driver_model.dart';
+import 'package:gas_driver/helpers/button_loader.dart';
 import 'package:gas_driver/models/user_model.dart';
 import 'package:gas_driver/providers/auth_provider.dart';
 import 'package:gas_driver/screens/auth/login.dart';
-import 'package:gas_driver/screens/home/homepage.dart';
 import 'package:gas_driver/widgets/loading_screen.dart';
-import 'package:gas_driver/widgets/my_nav.dart';
 import 'package:gas_driver/widgets/my_text_field.dart';
 import 'package:get/route_manager.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -26,6 +23,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   String? email;
   String? password, fullName, phoneNumber, plateNumber;
+  bool isLoading = false;
 
   File? profileFile;
   @override
@@ -179,22 +177,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     phone: phoneNumber,
                     plateNumber: plateNumber,
                     isDriver: true,
+                    isAdmin: false,
                   );
-                  // try {
-                  await Provider.of<AuthProvider>(context, listen: false)
-                      .signup(user, profileFile!, plateNumber!);
-                  Get.offAll(() => const InitialLoadingScreen());
-                  // } catch (e) {
-                  //   ScaffoldMessenger.of(context).showSnackBar(
-                  //     SnackBar(
-                  //       content: Text(e.toString()),
-                  //     ),
-                  //   );
-                  // }
+
+                  setState(() {
+                    isLoading = true;
+                  });
+                  try {
+                    await Provider.of<AuthProvider>(context, listen: false)
+                        .signup(user, profileFile!, plateNumber!);
+                    isLoading = false;
+                    Get.offAll(() => const InitialLoadingScreen());
+                  } catch (e) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(e.toString()),
+                      ),
+                    );
+                  }
                 },
                 textColor: Colors.white,
                 color: kIconColor,
-                child: const Text('Register'),
+                child: isLoading ? const MyLoader() : const Text('Register'),
               ),
             ),
             Row(
