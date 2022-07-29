@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_driver/constants.dart';
 import 'package:gas_driver/providers/auth_provider.dart';
@@ -6,8 +7,15 @@ import 'package:gas_driver/widgets/my_text_field.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
-class EditProfileScreen extends StatelessWidget {
+class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
+}
+
+class _EditProfileScreenState extends State<EditProfileScreen> {
+  String? name, email, phone;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +62,13 @@ class EditProfileScreen extends StatelessWidget {
                     height: 5,
                   ),
                   MyTextField(
-                      hintText: user.fullName!, prefixIcon: Iconsax.user),
+                      onChanged: (val) {
+                        setState(() {
+                          name = val;
+                        });
+                      },
+                      hintText: user.fullName!,
+                      prefixIcon: Iconsax.user),
                   const SizedBox(
                     height: 15,
                   ),
@@ -66,6 +80,11 @@ class EditProfileScreen extends StatelessWidget {
                     height: 5,
                   ),
                   MyTextField(
+                    onChanged: (val) {
+                      setState(() {
+                        email = val;
+                      });
+                    },
                     hintText: user.email!,
                     prefixIcon: Icons.email_outlined,
                   ),
@@ -80,6 +99,11 @@ class EditProfileScreen extends StatelessWidget {
                     height: 5,
                   ),
                   MyTextField(
+                    onChanged: (val) {
+                      setState(() {
+                        phone = val;
+                      });
+                    },
                     hintText: user.phone!,
                     prefixIcon: Iconsax.call,
                   ),
@@ -107,7 +131,21 @@ class EditProfileScreen extends StatelessWidget {
               width: double.infinity,
               margin: const EdgeInsets.symmetric(horizontal: 15),
               child: RaisedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(user.userId)
+                      .update({
+                    'fullName': name ?? user.fullName,
+                    'phone': phone ?? user.phone,
+                    'email': email ?? user.email,
+                  });
+
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: const Text('Profile updated successfully!'),
+                  ));
+                },
                 color: kIconColor,
                 textColor: Colors.white,
                 child: const Text('Save Changes'),

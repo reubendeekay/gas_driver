@@ -145,6 +145,8 @@ class RequestProvider with ChangeNotifier {
 
     Provider.of<AuthProvider>(context, listen: false).setTransitId(null);
     await notification.sendCompletedNotification(request);
+
+    Provider.of<AuthProvider>(context, listen: false).getCurrentUser();
     notifyListeners();
   }
 

@@ -4,6 +4,8 @@ import 'package:gas_driver/constants.dart';
 import 'package:gas_driver/models/request_model.dart';
 import 'package:gas_driver/providers/request_provider.dart';
 import 'package:gas_driver/screens/trail/widgets/trail_actions_sheet.dart';
+import 'package:gas_driver/widgets/loading_screen.dart';
+import 'package:get/route_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -129,7 +131,8 @@ class CustomerWidget extends StatelessWidget {
                     if (request.status.toLowerCase() == 'arrived') {
                       await Provider.of<RequestProvider>(context, listen: false)
                           .completeRequest(request, context);
-                      Navigator.of(context).pop();
+
+                      Get.offAll(() => InitialLoadingScreen());
                     } else {
                       await Provider.of<RequestProvider>(context, listen: false)
                           .arrivedAtDestination(
